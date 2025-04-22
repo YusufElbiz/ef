@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hafıza Oyunu - Efulim</title>
+  <style>
+    body {
+      background-color: #222;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 40px;
+    }
+    .box {
+      background-color: #333;
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    input[type="text"] {
+      font-size: 18px;
+      padding: 10px;
+      width: 80%;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .hidden {
+      display: none;
+    }
+    .success {
+      color: lime;
+    }
+    .fail {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>🧠 Hafıza Oyunu - Efulim Versiyonu</h2>
+    <p id="sayac">Hazırlanıyor...</p>
+    <h3 id="sayi"></h3>
+    <input id="tahmin" type="text" disabled placeholder="Tahmininizi girin">
+    <br>
+    <button id="kontrol" disabled>Cevapla</button>
+    <p id="mesaj"></p>
+    <p id="hak">Kalan Hak: 3</p>
+    <p id="seviye">Seviye: 1</p>
+  </div>
+
+  <script>
+    let basamak = 3;
+    let hak = 3;
+    let dogruSayilar = 0;
+    let seviye = 1;
+    let aktifSayi = "";
+    let tahminInput = document.getElementById("tahmin");
+    let kontrolBtn = document.getElementById("kontrol");
+    let sayiLabel = document.getElementById("sayi");
+    let mesaj = document.getElementById("mesaj");
+    let hakYazisi = document.getElementById("hak");
+    let seviyeYazisi = document.getElementById("seviye");
+    let sayac = document.getElementById("sayac");
+
+    function yeniTur() {
+      aktifSayi = "";
+      for (let i = 0; i < basamak; i++) {
+        aktifSayi += Math.floor(Math.random() * 10);
+      }
+      sayiLabel.innerText = "Hatırla: " + aktifSayi;
+      tahminInput.value = "";
+      tahminInput.disabled = true;
+      kontrolBtn.disabled = true;
+      sayac.innerText = "Süre: 3 saniye";
+      mesaj.innerText = "";
+
+      let sure = 3;
+      let zamanlayici = setInterval(() => {
+        sure--;
+        sayac.innerText = "Süre: " + sure + " saniye";
+        if (sure === 0) {
+          clearInterval(zamanlayici);
+          sayiLabel.innerText = "Şimdi yaz!";
+          tahminInput.disabled = false;
+          kontrolBtn.disabled = false;
+          tahminInput.focus();
+          sayac.innerText = "";
+        }
+      }, 1000);
+    }
+
+    kontrolBtn.addEventListener("click", () => {
+      let giris = tahminInput.value;
+      if (giris === aktifSayi) {
+        mesaj.innerText = "Doğru bildiniz Efulim!";
+        mesaj.className = "success";
+        dogruSayilar++;
+        if (dogruSayilar % 3 === 0) {
+          basamak++;
+          seviye++;
+          seviyeYazisi.innerText = "Seviye: " + seviye;
+        }
+      } else {
+        hak--;
+        mesaj.innerText = "Yanlış! Doğru: " + aktifSayi;
+        mesaj.className = "fail";
+        hakYazisi.innerText = "Kalan Hak: " + hak;
+      }
+
+      if (hak === 0) {
+        sayiLabel.innerText = "Oyun Bitti Efulim!";
+        kontrolBtn.disabled = true;
+        tahminInput.disabled = true;
+      } else {
+        setTimeout(() => yeniTur(), 2000);
+      }
+    });
+
+    window.onload = yeniTur;
+  </script>
+</body>
+</html>
