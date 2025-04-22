@@ -44,7 +44,7 @@
 </head>
 <body>
   <div class="box">
-    <h2>🧠 Hafıza Oyunu - Efulim Versiyonu</h2>
+    <h2>🧠 Hafıza Oyunu - Efulim İçin</h2>
     <p id="sayac">Hazırlanıyor...</p>
     <h3 id="sayi"></h3>
     <input id="tahmin" type="text" disabled placeholder="Tahmininizi girin">
